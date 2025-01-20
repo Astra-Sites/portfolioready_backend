@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Code Editor</title>
+    <link rel="stylesheet" href="../Assets/CSS/compiler.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMm2u3jA4bQ5RBI1a6D5Xyn9an8jLZC+j2P0PC" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Font Awesome for icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body class="bg-dark">
+    <header class="d-flex align-items-center justify-content-start flex-column">
+        <h1 class="text-light">Hope Developers</h1>
+        <p class="text-light">Write and preview HTML, CSS, and JavaScript</p>
+    </header>   
+    
+
+    <div class="nav-bar container gap-4 justify-content-center">
+        <!-- Run Button -->
+        <button class="btn btn-primary">View Full screen</button>
+        <button id="run-button" class="btn btn-warning">Run</button>
+    </div>
+    
+    
+
+    <div class="container d-flex flex-row">
+        <!-- Left Side: Code Editor -->
+
+        <div class="left">       
+
+            <!-- HTML Editor -->
+            <label><i class="fab fa-html5"></i> HTML</label>
+            <div class="code-editor">
+                <div class="line-numbers" id="html-lines"></div>
+                <textarea id="html-code" placeholder="Write HTML code here..."></textarea>
+            </div>
+
+            <!-- CSS Editor -->
+            <label><i class="fab fa-css3-alt"></i> CSS</label>
+            <div class="code-editor">
+                <div class="line-numbers" id="css-lines"></div>
+                <textarea id="css-code" placeholder="Write CSS code here..."></textarea>
+            </div>
+
+            <!-- JavaScript Editor -->
+            <label><i class="fab fa-js"></i> JavaScript</label>
+            <div class="code-editor">
+                <div class="line-numbers" id="js-lines"></div>
+                <textarea id="js-code" placeholder="Write JavaScript code here..."></textarea>
+            </div>
+        </div>
+
+
+        <!-- Right Side: Output & Console -->
+        <div class="right d-flex flex-column justify-content-start">
+
+            <div class="output">
+                    <!-- Output Display -->
+                    <label><i class="fas fa-play"></i> Output</label>
+                    <iframe id="output"></iframe>
+            </div>
+         
+
+            <!-- Console Output -->
+            <div id="console-output">
+                <label><i class="fas fa-terminal"></i> Console</label>
+                <div id="console-messages"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../Assets/JS/compiler.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
