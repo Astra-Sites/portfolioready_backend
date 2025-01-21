@@ -83,15 +83,15 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
       <img src="<?php echo $profileImage ?>" class="image" alt="">
       <h3 class="name"><?php echo $name ; ?></h3>
       <p class="role">student</p>
-      <a href="profile.php?uid=<?php echo$id?>" class="btn">view profile</a>
+      <a href="profile.php" class="btn">view profile</a>
    </div>
 
    <nav class="navbar">
-      <a href="home.php?uid=<?php echo$id?>"><i class="fas fa-home"></i><span>home</span></a>
-      <a href="courses.php?uid=<?php echo$id?>"><i class="fas fa-graduation-cap"></i><span>courses</span></a>
-      <a href="teachers.php?uid=<?php echo$id?>"><i class="fas fa-chalkboard-user"></i><span>teachers</span></a>
-      <a href="contact.php?uid=<?php echo$id?>"><i class="fas fa-headset"></i><span>contact us</span></a>
-      <a href="about.php?uid=<?php echo$id?>"><i class="fas fa-question"></i><span>about</span></a>
+      <a href="home.php"><i class="fas fa-home"></i><span>home</span></a>
+      <a href="courses.php"><i class="fas fa-graduation-cap"></i><span>courses</span></a>
+      <a href="teachers.php"><i class="fas fa-chalkboard-user"></i><span>teachers</span></a>
+      <a href="contact.php"><i class="fas fa-headset"></i><span>contact us</span></a>
+      <a href="about.php"><i class="fas fa-question"></i><span>about</span></a>
       <a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i><span>Logout</span></a>
    </nav>
 
@@ -292,12 +292,15 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
 
 <footer class="footer">
 
-   &copy; copyright @ 2024 by <span>Hope Developers</span> | all rights reserved!
+   &copy; copyright @ <span id="date"></span>  by <span>Astrasoftwares</span> | all rights reserved!
 
 </footer>
 
 <!-- custom js file link  -->
 <script src="js/script.js"></script>
+<script>
+   let date = document.getElementById('date').innerHTML = new Date().getFullYear();
+</script>
 
    
 </body>

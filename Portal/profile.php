@@ -1,3 +1,30 @@
+<?php
+session_start();
+if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth'])) {
+   header('location: ../AUTH/signin.php');
+   exit();
+}
+
+include('../Database/db.php');
+
+// Check which session variable is set and get the user ID
+$id = isset($_SESSION['google_auth']) ? $_SESSION['google_auth'] : $_SESSION['github_auth'];
+
+// Use prepared statements to prevent SQL injection
+$stmt = $conn->prepare("SELECT * FROM users WHERE SN = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$details = $result->fetch_object();
+
+$profileImage = htmlspecialchars($details->Avatar, ENT_QUOTES, 'UTF-8'); // Sanitize output
+$name = htmlspecialchars($details->First_Name, ENT_QUOTES, 'UTF-8'); // Sanitize output
+$email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize output
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +46,7 @@
    
    <section class="flex">
 
-      <a href="home.php" class="logo">Educa.</a>
+      <a href="home.php" class="logo">PortfolioReady</a>
 
       <form action="search.php" method="post" class="search-form">
          <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
@@ -34,9 +61,10 @@
       </div>
 
       <div class="profile">
-         <img src="images/pic-1.jpg" class="image" alt="">
-         <h3 class="name">shaikh anas</h3>
-         <p class="role">studen</p>
+         <!-- <img src="images/pic-1.jpg" class="image" alt=""> -->
+         <img src="<?php echo $profileImage; ?>" class="image" alt="">
+         <h3 class="name"><?php echo$name;  ?></h3>
+         <p class="role">student</p>
          <a href="profile.php" class="btn">view profile</a>
          <div class="flex-btn">
             <a href="login.php" class="option-btn">login</a>
@@ -55,9 +83,9 @@
    </div>
 
    <div class="profile">
-      <img src="images/pic-1.jpg" class="image" alt="">
-      <h3 class="name">shaikh anas</h3>
-      <p class="role">studen</p>
+      <img src="<?php echo$profileImage ?>" class="image" alt="">
+      <h3 class="name"><?php echo$name; ?></h3>
+      <p class="role">student</p>
       <a href="profile.php" class="btn">view profile</a>
    </div>
 
@@ -78,8 +106,8 @@
    <div class="info">
 
       <div class="user">
-         <img src="images/pic-1.jpg" alt="">
-         <h3>shaikh anas</h3>
+         <img src="<?php echo $profileImage?>" alt="">
+         <h3><?php echo $name ?></h3>
          <p>student</p>
          <a href="update.php" class="inline-btn">update profile</a>
       </div>

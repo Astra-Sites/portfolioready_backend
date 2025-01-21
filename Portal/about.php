@@ -1,27 +1,28 @@
 <?php
-
 session_start();
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to the homepage
-    header("Location: ../login.php");
-    exit(); // Ensure no further code is executed
+if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth'])) {
+   header('location: ../AUTH/signin.php');
+   exit();
 }
-
 
 include('../Database/db.php');
 
-$id = $_GET['uid'];
+// Check which session variable is set and get the user ID
+$id = isset($_SESSION['google_auth']) ? $_SESSION['google_auth'] : $_SESSION['github_auth'];
 
-$sql ="SELECT * FROM users where SN = $id"; 
-$result = mysqli_query($conn, $sql);
-$user = $result->fetch_assoc();
-$f_name = $user['First_Name'];
-$l_name = $user['Last_Name'];
-$profile = $user['Profile'];
+// Use prepared statements to prevent SQL injection
+$stmt = $conn->prepare("SELECT * FROM users WHERE SN = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$details = $result->fetch_object();
 
+$profileImage = htmlspecialchars($details->Avatar, ENT_QUOTES, 'UTF-8'); // Sanitize output
+$name = htmlspecialchars($details->First_Name, ENT_QUOTES, 'UTF-8'); // Sanitize output
+$email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize output
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +45,7 @@ $profile = $user['Profile'];
    
    <section class="flex">
 
-      <a href="home.php" class="logo">Educa.</a>
+      <a href="home.php" class="logo">PortfolioReady</a>
 
       <form action="search.php" method="post" class="search-form">
          <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
