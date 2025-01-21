@@ -1,3 +1,29 @@
+<?php
+session_start();
+if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth'])) {
+   header('location: ../AUTH/signin.php');
+   exit();
+}
+
+include('../Database/db.php');
+
+// Check which session variable is set and get the user ID
+$id = isset($_SESSION['google_auth']) ? $_SESSION['google_auth'] : $_SESSION['github_auth'];
+
+// Use prepared statements to prevent SQL injection
+$stmt = $conn->prepare("SELECT * FROM users WHERE SN = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$details = $result->fetch_object();
+
+$profileImage = htmlspecialchars($details->Avatar, ENT_QUOTES, 'UTF-8'); // Sanitize output
+$fname = htmlspecialchars($details->First_Name, ENT_QUOTES, 'UTF-8'); // Sanitize output
+$lname = htmlspecialchars($details->Last_Name, ENT_QUOTES, 'UTF-8'); // Sanitize output
+$email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize output
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +45,7 @@
    
    <section class="flex">
 
-      <a href="home.php" class="logo">Educa.</a>
+      <a href="home.php" class="logo">PortfolioReady</a>
 
       <form action="search.php" method="post" class="search-form">
          <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">
@@ -35,8 +61,8 @@
 
       <div class="profile">
          <img src="images/pic-1.jpg" class="image" alt="">
-         <h3 class="name">shaikh anas</h3>
-         <p class="role">studen</p>
+         <h3 class="name"><?php echo$fname ?></h3>
+         <p class="role">student</p>
          <a href="profile.php" class="btn">view profile</a>
          <div class="flex-btn">
             <a href="login.php" class="option-btn">login</a>
@@ -56,8 +82,8 @@
 
    <div class="profile">
       <img src="images/pic-1.jpg" class="image" alt="">
-      <h3 class="name">shaikh anas</h3>
-      <p class="role">studen</p>
+      <h3 class="name"><?php echo$fname;   ?></h3>
+      <p class="role">student</p>
       <a href="profile.php" class="btn">view profile</a>
    </div>
 
@@ -76,7 +102,7 @@
    <form action="" method="post" enctype="multipart/form-data">
       <h3>update profile</h3>
       <p>update name</p>
-      <input type="text" name="name" placeholder="shaikh anas" maxlength="50" class="box">
+      <input type="text" name="name" value="<?php echo $fname. " ".$lname;  ?>" maxlength="50" class="box">
       <p>update email</p>
       <input type="email" name="email" placeholder="shaikh@gmail.come" maxlength="50" class="box">
       <p>previous password</p>
@@ -91,19 +117,6 @@
    </form>
 
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <footer class="footer">
