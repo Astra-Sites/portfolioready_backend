@@ -1,23 +1,25 @@
 <?php
 session_start();
-if (!isset($_SESSION['google_auth'])) {
+if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth'])) {
    header('location: ../AUTH/signin.php');
    exit();
 }
 
 include('../Database/db.php');
-$id = $_GET['uid'];
 
+// Check which session variable is set and get the user ID
+$id = isset($_SESSION['google_auth']) ? $_SESSION['google_auth'] : $_SESSION['github_auth'];
 
+// Use prepared statements to prevent SQL injection
+$stmt = $conn->prepare("SELECT * FROM users WHERE SN = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$details = $result->fetch_object();
 
-//   SN, First_Name, Last_Name, Phone, Email, Avatar, Pass, Reg_Date
-
-$userinfo = "SELECT * FROM users WHERE SN = '$id'";
-$userinfo_query = mysqli_query($conn, $userinfo);
-$details = mysqli_fetch_object($userinfo_query);
-
-$profileImage = $details->Avatar;
-$name = $details->First_Name;
+$profileImage = htmlspecialchars($details->Avatar, ENT_QUOTES, 'UTF-8'); // Sanitize output
+$name = htmlspecialchars($details->First_Name, ENT_QUOTES, 'UTF-8'); // Sanitize output
+$email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize output
 
 ?>
 
@@ -86,10 +88,10 @@ $name = $details->First_Name;
 
    <nav class="navbar">
       <a href="home.php?uid=<?php echo$id?>"><i class="fas fa-home"></i><span>home</span></a>
-      <a href="about.php?uid=<?php echo$id?>"><i class="fas fa-question"></i><span>about</span></a>
       <a href="courses.php?uid=<?php echo$id?>"><i class="fas fa-graduation-cap"></i><span>courses</span></a>
       <a href="teachers.php?uid=<?php echo$id?>"><i class="fas fa-chalkboard-user"></i><span>teachers</span></a>
       <a href="contact.php?uid=<?php echo$id?>"><i class="fas fa-headset"></i><span>contact us</span></a>
+      <a href="about.php?uid=<?php echo$id?>"><i class="fas fa-question"></i><span>about</span></a>
       <a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i><span>Logout</span></a>
    </nav>
 

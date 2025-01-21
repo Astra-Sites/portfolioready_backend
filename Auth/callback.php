@@ -1,80 +1,82 @@
 <?php
+require '../vendor/autoload.php';
 
-Use Dotenv\Dotenv;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Dotenv\Dotenv;
 
-include('../vendor/autoload.php');
+session_start();
 
-function exchangeCode($data, $apiUrl){
-
-    $client = new Client();
-
-    try{
-        $response = $client->post($apiUrl, [
-            'form_params' => $data,
-            'headers' => [
-                'Accept' => 'application/json'
-            ]
-            ]);
-
-            if($response->getStatusCode() == 200){
-                  return json_decode($response->getBody()->getContents());
-            }
-            return false;
-
-    }catch(RequestException $e){
-       return false;
-    }
-
-}
-
-if (isset($_GET['error']) || !isset($_GET['code'])){
-    echo'Some Error Occured';
+if (isset($_GET['error']) || !isset($_GET['code'])) {
+    echo 'Some Error Occurred';
     exit();
 }
-
 
 $authCode = $_GET['code'];
 
 $dotenv = Dotenv::createImmutable('../');
 $dotenv->load();
 
-
+$client = new Client();
+$apiUrl = 'https://github.com/login/oauth/access_token';
 
 $data = [
-
     'client_id' => $_ENV['GITHUB_CLIENT_ID'],
     'client_secret' => $_ENV['GITHUB_CLIENT_SECRECT'],
     'code' => $authCode,
 ];
 
+try {
+    $response = $client->post($apiUrl, [
+        'form_params' => $data,
+        'headers' => [
+            'Accept' => 'application/json'
+        ]
+    ]);
 
-$apiUrl = "https://github.com/login/oauth/access_token";
+    if ($response->getStatusCode() == 200) {
+        $tokenData = json_decode($response->getBody()->getContents(), true);
+        $accessToken = $tokenData['access_token'];
 
+        // Use the access token to get user information
+        $userResponse = $client->get('https://api.github.com/user', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $accessToken,
+                'Accept' => 'application/json'
+            ]
+        ]);
 
-$tokenData = exchangeCode($data, $apiUrl);
+        if ($userResponse->getStatusCode() == 200) {
+            $userData = json_decode($userResponse->getBody()->getContents(), true);
+            $firstName = htmlspecialchars($userData['name'], ENT_QUOTES, 'UTF-8');
+            $lastName = ''; // GitHub does not provide last name, set it to empty or handle accordingly
+            $email = htmlspecialchars($userData['email'], ENT_QUOTES, 'UTF-8');
+            $profileImage = htmlspecialchars($userData['avatar_url'], ENT_QUOTES, 'UTF-8');
+            $phone = ''; // GitHub does not provide phone, set it to empty or handle accordingly
+            $password = ''; // Set password to empty or handle accordingly
+            $regDate = date('Y-m-d H:i:s'); // Current date and time
 
+            // Insert or update user information in the database
+            include('../Database/db.php');
+            $stmt = $conn->prepare("INSERT INTO users (First_Name, Last_Name, Phone, Email, Avatar, Pass, Reg_Date) VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE First_Name = VALUES(First_Name), Last_Name = VALUES(Last_Name), Phone = VALUES(Phone), Avatar = VALUES(Avatar)");
+            $stmt->bind_param("sssssss", $firstName, $lastName, $phone, $email, $profileImage, $password, $regDate);
+            $stmt->execute();
 
-if($tokenData === false){
-    exit('Error token');
+            // Get the user ID
+            $id = $stmt->insert_id ? $stmt->insert_id : $conn->query("SELECT SN FROM users WHERE Email = '$email'")->fetch_object()->SN;
+
+            // Store user information in session
+            $_SESSION['github_auth'] = $id;
+
+            // Redirect to home page
+            header('Location: ../portal/home.php');
+            exit();
+        }
+    }
+    echo 'Failed to get user information';
+    exit();
+} catch (RequestException $e) {
+    echo 'Request Exception: ' . $e->getMessage();
+    exit();
 }
-
-
-if(!empty($tokenData->Error)){
-    exit($tokenData->error);
-}
-
-if (!empty($tokenData->access_token)){
-    setcookie('cr_github_access_token', $tokenData->access_token, time() + 2592000, "/"
-    ,"", false, true);
-    
-// The last argument -true - sets it as an httponly cookie
-    
-header('Location: ../portal/home.php');
-exit();
-}
-
-
-
 ?>
