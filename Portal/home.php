@@ -63,10 +63,10 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
          <img src="<?php echo htmlspecialchars($profileImage);  ?>" class="image" alt="Profile Picture">
           <h3 class="name"><?php echo $name; ?></h3>
          <p class="role">student</p>
-         <a href="profile.php?uid=<?php echo$id?>" class="btn">view profile</a>
+         <a href="profile.php" class="btn">view profile</a>
          <div class="flex-btn">
-            <a href="login.php?uid=<?php echo$id?>" class="option-btn">login</a>
-            <a href="register.php?uid=<?php echo$id?>" class="option-btn">register</a>
+            <a href="login.php" class="option-btn">login</a>
+            <a href="register.php" class="option-btn">register</a>
          </div>
       </div>
 
@@ -175,7 +175,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
       <div class="box">
          <h3 class="title">become a tutor</h3>
          <p class="tutor">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Perspiciatis, nam?</p>
-         <a href="teachers.php?uid=<?php echo$id?>" class="inline-btn">get started</a>
+         <a href="teachers.php" class="inline-btn">get started</a>
       </div>
    </div>
 </section>
@@ -196,7 +196,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">complete HTML tutorial</h3>
-         <a href="playlist.php?uid=<?php echo$id?>" class="inline-btn">view playlist</a>
+         <a href="playlist.php" class="inline-btn">view playlist</a>
       </div>
 
       <div class="box">
@@ -212,7 +212,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">complete CSS tutorial</h3>
-         <a href="playlist.php?uid=<?php echo$id?>" class="inline-btn">view playlist</a>
+         <a href="playlist.php" class="inline-btn">view playlist</a>
       </div>
 
       <div class="box">
@@ -228,7 +228,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">complete JS tutorial</h3>
-         <a href="playlist.php?uid=<?php echo$id?>" class="inline-btn">view playlist</a>
+         <a href="playlist.php" class="inline-btn">view playlist</a>
       </div>
 
       <div class="box">
@@ -244,7 +244,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">complete Boostrap tutorial</h3>
-         <a href="playlist.php?uid=<?php echo$id?>" class="inline-btn">view playlist</a>
+         <a href="playlist.php" class="inline-btn">view playlist</a>
       </div>
 
       <div class="box">
@@ -260,7 +260,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">complete JQuery tutorial</h3>
-         <a href="playlist.php?uid=<?php echo$id?>" class="inline-btn">view playlist</a>
+         <a href="playlist.php" class="inline-btn">view playlist</a>
       </div>
 
       <div class="box">
@@ -276,13 +276,13 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">complete SASS tutorial</h3>
-         <a href="playlist.php?uid=<?php echo$id?>" class="inline-btn">view playlist</a>
+         <a href="playlist.php" class="inline-btn">view playlist</a>
       </div>
 
    </div>
 
    <div class="more-btn">
-      <a href="courses.php?uid=<?php echo$id?>" class="inline-option-btn">view all courses</a>
+      <a href="courses.php" class="inline-option-btn">view all courses</a>
    </div>
 
 </section>
