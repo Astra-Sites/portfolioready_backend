@@ -1,72 +1,23 @@
 <?php
-
-// session_start();
-// // Check if the user is logged in
-// if (!isset($_SESSION['user_id'])) {
-//     // Redirect to the homepage
-//     header("Location: ../login.php");
-//     exit(); // Ensure no further code is executed
-// }
-
-
-// include('../Database/db.php');
-
-// $id = $_GET['uid'];
-
-// $sql ="SELECT * FROM users where SN = $id"; 
-// $result = mysqli_query($conn, $sql);
-// $user = $result->fetch_assoc();
-// $f_name = $user['First_Name'];
-// $l_name = $user['Last_Name'];
-// $profile = $user['Profile'];
-
-
-Use Dotenv\Dotenv;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-
-include('../vendor/autoload.php');
-
-$dotenv = Dotenv::createImmutable('../');
-$dotenv->load();
-
-/////=====================================...Google Authentication Start...========================================================//////
-
-$client = new Google\Client;
-
-$client ->setClientId($_ENV['GOOGLE_CLIENT_ID']);
-$client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']);
-$client->setRedirectUri("http://localhost/PortfolioReady/portal/home.php");
-
-
-if (!isset($_GET["code"])){
-    exit("Login failed");
+session_start();
+if (!isset($_SESSION['google_auth'])) {
+   header('location: ../AUTH/signin.php');
+   exit();
 }
 
-
-$token = $client->fetchAccessTokenWithAuthCode($_GET["code"]);
-
-$client->setAccessToken($token["access_token"]);
-
-echo $token["access_token"];
-
-$oauth = new  Google\Service\Oauth2($client);
-
-$userinfo = $oauth->userinfo->get();
+include('../Database/db.php');
+$id = $_GET['uid'];
 
 
-// var_dump(
-//     $userinfo->email,
-//     $userinfo->familyName,
-//     $userinfo->givenName,
-//     $userinfo->name,
-//     $userinfo->picture,
-//     $userinfo->id
-// );
 
+//   SN, First_Name, Last_Name, Phone, Email, Avatar, Pass, Reg_Date
 
-// ==========================================GITHUB AUTH=====================================//
+$userinfo = "SELECT * FROM users WHERE SN = '$id'";
+$userinfo_query = mysqli_query($conn, $userinfo);
+$details = mysqli_fetch_object($userinfo_query);
 
+$profileImage = $details->Avatar;
+$name = $details->First_Name;
 
 ?>
 
@@ -107,16 +58,8 @@ $userinfo = $oauth->userinfo->get();
       </div>
 
       <div class="profile">
-
-
-         <!-- Display Profile Image -->
-      <?php if (!empty($profileImage) && file_exists($profileImage)): ?>
-         <img src="<?php echo htmlspecialchars($profile); ?>" class="image" alt="Profile Picture">
-      <?php else: ?>
-         <img src="<?php echo $userinfo->picture?>" class="image" alt="">
-      <?php endif; ?>
-
-          <h3 class="name"><?php echo$userinfo->name; ?></h3>
+         <img src="<?php echo htmlspecialchars($profileImage);  ?>" class="image" alt="Profile Picture">
+          <h3 class="name"><?php echo $name; ?></h3>
          <p class="role">student</p>
          <a href="profile.php?uid=<?php echo$id?>" class="btn">view profile</a>
          <div class="flex-btn">
@@ -130,14 +73,13 @@ $userinfo = $oauth->userinfo->get();
 </header>   
 
 <div class="side-bar">
-
    <div id="close-btn">
       <i class="fas fa-times"></i>
    </div>
 
    <div class="profile">
-      <img src="<?php echo $userinfo->picture?>" class="image" alt="">
-      <h3 class="name"><?php echo$userinfo->name; ?></h3>
+      <img src="<?php echo $profileImage ?>" class="image" alt="">
+      <h3 class="name"><?php echo $name ; ?></h3>
       <p class="role">student</p>
       <a href="profile.php?uid=<?php echo$id?>" class="btn">view profile</a>
    </div>
