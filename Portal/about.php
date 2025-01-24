@@ -266,11 +266,6 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
 </section>
 
 
-
-
-
-
-
 <footer class="footer">
 
    &copy; copyright @ 2022 by <span>mr. web designer</span> | all rights reserved!

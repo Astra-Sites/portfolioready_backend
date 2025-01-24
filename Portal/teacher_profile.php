@@ -68,7 +68,6 @@
       <a href="teachers.php"><i class="fas fa-chalkboard-user"></i><span>teachers</span></a>
       <a href="contact.php"><i class="fas fa-headset"></i><span>contact us</span></a>
    </nav>
-
 </div>
 
 <section class="teacher-profile">

@@ -20,9 +20,6 @@ if (isset($_POST['send'])){
 
      $PhoneInput = $_POST['phone'];
 
-
-
-
      $sql = "SELECT * FROM users where Phone = '$PhoneInput'";
      $result = mysqli_query($conn,$sql);
      $row = mysqli_num_rows($result);

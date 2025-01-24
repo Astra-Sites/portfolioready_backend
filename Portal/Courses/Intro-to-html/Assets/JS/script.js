@@ -12,12 +12,18 @@ if (!runButton || !htmlEditor || !cssEditor || !jsEditor || !outputFrame || !con
     alert("Error: Required elements are missing from the page.");
 }
 
-// Function to display messages in the console
+// Array to store console messages
+const storedConsoleMessages = [];
+
+// Function to display and store messages in the console
 function handleConsole(message, type = 'log') {
     const messageElement = document.createElement('div');
     messageElement.textContent = `[${type.toUpperCase()}] ${message}`;
     consoleMessages.appendChild(messageElement);
     consoleMessages.scrollTop = consoleMessages.scrollHeight; // Scroll to latest message
+
+    // Store the message
+    storedConsoleMessages.push({ message, type });
 }
 
 // Bind handleConsole to window to access it within the iframe
@@ -28,35 +34,33 @@ function runCode() {
     try {
         // Clear console before each run
         consoleMessages.innerHTML = '';
+        storedConsoleMessages.length = 0; // Clear stored messages
 
         // Combine HTML, CSS, and JS into a single output
         const htmlContent = htmlEditor.value;
         const cssContent = `<style>${cssEditor.value}</style>`;
         const jsContent = `
             <script>
-                window.onerror = function (msg, url, lineNo, columnNo, error) {
-                    parent.handleConsole('Error: ' + msg + ' at line ' + lineNo + ':' + columnNo, 'error');
-                    return true;
-                };
                 (function() {
-                    const console = { 
-                        log: (msg) => parent.handleConsole(msg, 'log'), 
-                        warn: (msg) => parent.handleConsole(msg, 'warn'), 
-                        error: (msg) => parent.handleConsole(msg, 'error') 
+                    const originalConsoleLog = console.log;
+                    console.log = function(message) {
+                        window.parent.handleConsole(message, 'log');
+                        originalConsoleLog.apply(console, arguments);
+                    };
+                    const originalConsoleError = console.error;
+                    console.error = function(message) {
+                        window.parent.handleConsole(message, 'error');
+                        originalConsoleError.apply(console, arguments);
                     };
                     ${jsEditor.value}
                 })();
-            <\/script>`;
+            </script>
+        `;
 
-        // Write to iframe (output)
-        const fullContent = htmlContent + cssContent + jsContent;
-        const outputDocument = outputFrame.contentDocument || outputFrame.contentWindow.document;
-        outputDocument.open();
-        outputDocument.write(fullContent);
-        outputDocument.close();
-
+        const output = `${htmlContent}${cssContent}${jsContent}`;
+        outputFrame.srcdoc = output;
     } catch (error) {
-        handleConsole(`JavaScript Execution Error: ${error.message}`, 'error');
+        handleConsole(error.message, 'error');
     }
 }
 
@@ -100,6 +104,29 @@ htmlEditor.addEventListener('keypress', (e) => {
     }
 });
 
+// Auto-complete for lorem typing "lorem" and pressing Enter
+htmlEditor.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && htmlEditor.value.trim().endsWith('lorem')) {
+        e.preventDefault();
+        
+        // Get the current cursor position
+        const cursorPosition = htmlEditor.selectionStart;
+        
+        // Insert the "Lorem ipsum" text at the cursor position
+        const textBeforeCursor = htmlEditor.value.substring(0, cursorPosition - 5); // -5 to remove 'lorem'
+        const textAfterCursor = htmlEditor.value.substring(cursorPosition);
+        const loremText = `Lorem ipsum dolor sit amet consectetur adipisicing elit lorem.`;
+        
+        htmlEditor.value = textBeforeCursor + loremText + textAfterCursor;
+        
+        // Move the cursor to the end of the inserted text
+        htmlEditor.selectionStart = htmlEditor.selectionEnd = textBeforeCursor.length + loremText.length;
+    }
+});
+
+// Add event listener to the run button
+runButton.addEventListener('click', runCode);
+
 // Event listeners with error handling
 runButton.addEventListener('click', () => {
     consoleMessages.innerHTML = ''; // Clear console before each run
@@ -110,11 +137,6 @@ htmlEditor.addEventListener('input', saveContent);
 cssEditor.addEventListener('input', saveContent);
 jsEditor.addEventListener('input', saveContent);
 window.addEventListener('load', loadContent);
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 // Responsive code navbar
 
@@ -127,9 +149,6 @@ window.addEventListener('load', loadContent);
     let htmlNav = document.querySelector('.html-nav');
     let cssNav = document.querySelector('.css-nav');
     let jsNav = document.querySelector('.js-nav');
-
-
-
 
     // Display Html Editor
     htmlNav.addEventListener('click', ()=>{
@@ -151,5 +170,3 @@ window.addEventListener('load', loadContent);
         htmlCode.style.display = "none";
         jsCode.style.display = "block";
     })
-
-

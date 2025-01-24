@@ -1,3 +1,66 @@
+<?php
+
+require '../../../vendor/autoload.php'; // Ensure Parsedown is included
+
+use Dotenv\Dotenv; // Keep this for dotenv since it is namespaced
+
+// Load environment variables
+$dotenv = Dotenv::createImmutable('../../../');
+$dotenv->load();
+
+
+$userprompt = "";
+$htmlOutput = "";
+
+if (isset($_POST["askastra"])) {
+    // Initialize Parsedown directly
+    $parsedown = new Parsedown();
+
+    $prompt = trim($_POST["prompt"]);
+    $prompt = htmlspecialchars($prompt, ENT_QUOTES, 'UTF-8');
+
+    // cURL initialization and request
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => $_ENV['GOOGLE_GEMINI_URL'] . '?key=' . $_ENV['GOOGLE_GEMINI_API'],
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => json_encode([
+            "contents" => [
+                [
+                    "parts" => [
+                        ["text" => $prompt]
+                    ]
+                ]
+            ]
+        ]),
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+    ]);
+
+    $response = curl_exec($curl);
+
+    if (curl_errno($curl)) {
+        echo "cURL Error: " . curl_error($curl);
+        curl_close($curl);
+        exit;
+    }
+
+    curl_close($curl);
+
+    $data = json_decode($response, true);
+    $text = $data['candidates'][0]['content']['parts'][0]['text'] ?? "No text found";
+
+    // Convert Markdown to HTML
+    $userprompt = $prompt;
+    $htmlOutput = $parsedown->text($text);
+
+    // Output HTML
+    // echo $htmlOutput;
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +72,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <!-- Stylesheet -->
    <link rel="stylesheet" href="Assets/CSS/style.css">
+   <link rel="stylesheet" href="Assets/CSS/astra.css">
    <link rel="shortcut icon" href="Assets/Images/Favicons/android-chrome-512x512.png" type="image/x-icon">
 </head>
 <body style="max-height: 100vh;">
@@ -17,7 +81,7 @@
   <nav class="navbar navbar-dark position-fixed container-fluid p-3 z-3">
     <div class="container-fluid">
 
-      <a class="navbar-brand btn btn-outline-light  px-3 chat-astra" href="#">
+      <a class="navbar-brand btn btn-outline-light  px-3 chat-astra" href="#" data-bs-toggle="offcanvas" data-bs-target="#Askastra" aria-controls="offcanvasRight">
         <i class="bi bi-stars"></i>
         Ask Astra
       </a>
@@ -140,14 +204,15 @@
 
 
                       <div class="run d-flex align-items-center justify-content-start ms-4" style="gap: 1.5rem; position: fixed; bottom: 10px;">
-                        <button class="btn btn-warning" id="run-button">Run</button>
+                        <button class="btn btn-warning" id="run-button">Run</button>     
+                        <i class="bi bi-terminal text-light" style="font-size: 2rem;" data-bs-toggle="offcanvas" data-bs-target="#console" aria-controls="offcanvasBottom"></i>
                         <i class="bi bi-clipboard-check  text-light" style="font-size: 2rem;"></i>
                         <i class="bi bi-arrow-repeat text-light" style="font-size: 2rem;"></i>
+                   
                       </div>
                   </div>
                   <!-- End of code Handler -->
 
-      
                </div>
                
 
@@ -164,40 +229,87 @@
                       <iframe id="output" width="100%"  style="resize: vertical;"></iframe>
                     </div>
 
-                    <!-- Console output section -->
-                    <div id="console-output" style="gap: 1.5rem; position: fixed; right: 20px; bottom: 20px;">
-                      <label><i class="fas fa-terminal"></i> Console</label>
-                      <div id="console-messages"></div>
-                  </div>
+    
 
-                    <!-- back next -->
-                      <div class="run d-flex ms-4" style="gap: 1.5rem; position: fixed; right: 10px; bottom: 10px;">
-                        <button class="btn btn-outline-dark">Back</button>
-                        <button class="btn btn-warning">Next</button>
-                      </div>
-                </div>
-   </section>
+                  <!-- back next -->
+                    <div class="run d-flex ms-4" style="gap: 1.5rem; position: fixed; right: 10px; bottom: 10px;">
+                      <button class="btn btn-outline-dark">Back</button>
+                      <button class="btn btn-warning">Next</button>
+                    </div>
+              </div>
+      </section>
 
 
+      <!-- Offcanvas elements start -->
+       <!-- console canvas -->
+      <div class="offcanvas offcanvas-bottom" tabindex="-1" id="console" aria-labelledby="offcanvasBottomLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasBottomLabel">Console</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body small bg-dark" >
+          <!-- Console output section -->
+           <div id="console-output">
+                <div id="console-messages" class="text-light"></div>
+           </div>
+          
+        </div>
+      </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="Assets/JS/script.js"></script>
+    <!-- Ask Astra -->
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="Askastra" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasRightLabel">Chat with Astra</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+          <div id="chat-messages" class="flex-grow-1 overflow-auto mb-3">
+            <!-- Chat messages will appear here -->
+          <div id="chatMessages" class="chat-messages">
+          <div class="message bot mb-4">Hi, welcome Astra here!  How can we assit you today?. 😍</div>
+            <?php if (!empty($userprompt)): ?>
+            <div class="message user"><?php echo $userprompt; ?></div>
+            <?php endif; ?>
+            <?php if (!empty($htmlOutput)): ?>
+                <div class="message bot"><?php echo $htmlOutput; ?></div>
+            <?php endif; ?>
+        </div>
+          </div>
+          <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" class="input-group" id="msgForm">
+            <textarea id="chatInput" name="prompt" class="form-control" rows="1" placeholder="Type your message..."></textarea>
+            <button type="submit" name="askastra" id="send-button" class="btn btn-primary">Send</button>
+          </form>
+        </div>
+      </div>
 
-  <script>
-    // onload
-    window.onload = function() {
-      if (window.innerWidth < 1024) {
-        window.location.href = "debug-001.html"; // Replace with your desired URL
-      }
-    };
 
-    // onresize
-    window.onresize = function() {
-      if (window.innerWidth < 1024) {
-        window.location.href = "debug-001.html"; // Replace with your desired URL
-      }
-    };
+
+
+      <!-- Ast -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="Assets/JS/script.js"></script>
+      <!-- Markedown -->
+      <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+      <script>
+        // onload
+        window.onload = function() {
+          if (window.innerWidth < 1024) {
+            window.location.href = "debug-001.html"; // Replace with your desired URL
+          }
+        };
+
+      // onresize
+      window.onresize = function() {
+        if (window.innerWidth < 1024) {
+          window.location.href = "debug-001.html"; // Replace with your desired URL
+        }
+      };
 
   </script>
 </body>
 </html>
+
+
+
+

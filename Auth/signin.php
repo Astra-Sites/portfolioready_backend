@@ -105,7 +105,7 @@ $MS_redirectUri = $_ENV['MICROSOFT_REDIRECT_URI'];
             <!-- Social Login Buttons -->
             <div class="mt-3">
                  <a href='<?= $url ?>' class="btn btn-outline-secondary btn-block mb-2 d-flex align-items-center justify-content-center">
-                    <img src="https://auth.openai.com/assets/google-logo-NePEveMl.svg" width="20" class="mr-2">
+                    <img src="google.png" width="20" class="mr-2">
                     Continue with Google Account
                  </a>
                 <a href="https://github.com/login/oauth/authorize?client_id=<?php echo$_ENV['GITHUB_CLIENT_ID']; ?>&scope=read:user user:email" class="btn btn-outline-secondary btn-block mb-2 d-flex align-items-center justify-content-center">

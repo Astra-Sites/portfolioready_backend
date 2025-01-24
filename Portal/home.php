@@ -143,7 +143,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
          <p class="likes">total comments : <span>12</span></p>
          <a href="#" class="inline-btn">view comments</a>
          <p class="likes">saved playlists : <span>4</span></p>
-         <a href="#" class="inline-btn">view playlists</a>
+         <a href="#" class="inline-btn">Enroll Nows</a>
       </div>
 
       <div class="box">
@@ -181,7 +181,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
 </section>
 
 <section class="courses">
-   <h1 class="heading">Video tutorials</h1>
+   <h1 class="heading">Our Courses</h1>
    <div class="box-container">
       <div class="box">
          <div class="tutor">
@@ -195,8 +195,8 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <img src="images/thumb-1.png" alt="">
             <span>10 videos</span>
          </div>
-         <h3 class="title">complete HTML tutorial</h3>
-         <a href="playlist.php" class="inline-btn">view playlist</a>
+         <h3 class="title">Web Development Fundamentals</h3>
+         <a href="playlist.php" class="inline-btn">Enroll Now</a>
       </div>
 
       <div class="box">
@@ -212,7 +212,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">complete CSS tutorial</h3>
-         <a href="playlist.php" class="inline-btn">view playlist</a>
+         <a href="playlist.php" class="inline-btn">Enroll Now</a>
       </div>
 
       <div class="box">
@@ -228,7 +228,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">complete JS tutorial</h3>
-         <a href="playlist.php" class="inline-btn">view playlist</a>
+         <a href="playlist.php" class="inline-btn">Enroll Now</a>
       </div>
 
       <div class="box">
@@ -244,7 +244,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">complete Boostrap tutorial</h3>
-         <a href="playlist.php" class="inline-btn">view playlist</a>
+         <a href="playlist.php" class="inline-btn">Enroll Now</a>
       </div>
 
       <div class="box">
@@ -260,7 +260,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">complete JQuery tutorial</h3>
-         <a href="playlist.php" class="inline-btn">view playlist</a>
+         <a href="playlist.php" class="inline-btn">Enroll Now</a>
       </div>
 
       <div class="box">
@@ -276,7 +276,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">complete SASS tutorial</h3>
-         <a href="playlist.php" class="inline-btn">view playlist</a>
+         <a href="playlist.php" class="inline-btn">Enroll Now</a>
       </div>
 
    </div>
