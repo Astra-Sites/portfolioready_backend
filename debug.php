@@ -25,7 +25,7 @@ try {
     $mail->isHTML(true);
     $mail->Subject = 'Test Email from Portfolio Ready';
     $mail->Body = '<b>Hello!</b> This is a test email sent using Gmail and PHPMailer.';
-    $mail->AltBody = 'Hello! This is a test email sent using Gmail and PHPMailer.';
+    $mail->AltBody = 'Hello! This is a test email sent using Gmail and PHPMailer  Welcome to portfolio Ready.';
 
     // Send Email
     $mail->send();

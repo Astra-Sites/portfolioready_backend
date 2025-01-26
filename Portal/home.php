@@ -29,7 +29,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>home</title>
+   <title>Portal</title>
 
    <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
@@ -60,7 +60,8 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
       </div>
 
       <div class="profile">
-         <img src="<?php echo htmlspecialchars($profileImage);  ?>" class="image" alt="Profile Picture">
+         <img src="<?php echo htmlspecialchars($profileImage); ?>" class="image" alt="Profile Picture" onerror="this.onerror=null;this.src='images/pic-1.jpg';">
+         <img src="images/pic-1.jpg" class="image" alt="">
           <h3 class="name"><?php echo $name; ?></h3>
          <p class="role">student</p>
          <a href="profile.php" class="btn">view profile</a>

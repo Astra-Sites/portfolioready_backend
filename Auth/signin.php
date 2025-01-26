@@ -82,12 +82,12 @@ $MS_redirectUri = $_ENV['MICROSOFT_REDIRECT_URI'];
             <h2 class="text-center font-weight-bold mb-4">Sign In</h2>
             
             <!-- Email Address Input -->
-            <form id="signup-form">
+            <form id="signup-form" method="post" action="Email_Callback.php">
                 <div class="form-group">
                     <label for="email">Email address<span class="text-danger">*</span></label>
-                    <input type="email" class="form-control py-2" id="email" placeholder="Enter your email" required>
+                    <input type="email"  name="email" class="form-control py-2" id="email" placeholder="Enter your email" required>
                 </div>
-                <button type="submit" class="btn btn-success btn-block">Continue</button>
+                <button type="submit" name="sendemail" class="btn btn-success btn-block">Continue</button>
             </form>
 
             <!-- Already have an account -->
@@ -127,7 +127,7 @@ $MS_redirectUri = $_ENV['MICROSOFT_REDIRECT_URI'];
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Custom JS -->
-    <script>
+    <!-- <script>
 
         document.getElementById("signup-form").addEventListener("submit", function(event) {
             event.preventDefault();
@@ -139,7 +139,7 @@ $MS_redirectUri = $_ENV['MICROSOFT_REDIRECT_URI'];
             }
         });
 
-    </script>
+    </script> -->
 
 
 </body>
