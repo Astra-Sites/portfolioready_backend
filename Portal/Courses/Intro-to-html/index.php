@@ -1,11 +1,11 @@
 <?php
 session_start();
 if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth'])) {
-   header('location: ../AUTH/signin.php');
+   header('location: ../../../AUTH/signin.php');
    exit();
 }
 
-include('../Database/db.php');
+include('../../../Database/db.php');
 
 
 
@@ -22,6 +22,9 @@ $userprompt = "";
 $htmlOutput = "";
 
 if (isset($_POST["askastra"])) {
+
+    require '../../../vendor/autoload.php'; // Ensure Parsedown is included
+
     // Initialize Parsedown directly
     $parsedown = new Parsedown();
 
@@ -96,6 +99,12 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Introduction to HTML</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/vs2015.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+
   <!-- BOOSTRAP ICONS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <!-- Stylesheet -->
@@ -129,11 +138,12 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
 
 
       <div class="right d-flex align-items-center justify-content-between">
-        <a href="#" class="text-light text-decoration-none mx-4 fs-5">Tools</a>
-        <div class="profile-pic mx-4 rounded-circle">
+        <div class="prof d-flex align-items-center justify-content-between">
+        <a href="#" class="text-light text-decoration-none mx-1"> <?php echo $name   ?> </a>
+        <div class="profile-pic mx-4 rounded-circle" style="background-image: url('<?php echo $profileImage; ?>');">
           <!-- Pofile picture is here -->
         </div>
-
+        </div>
         <button class="btn btn-outline-warning px-3">Start Free Trial</button>
       </div>
     </div>
@@ -284,8 +294,11 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
         </div>
       </div>
 
-    <!-- Ask Astra -->
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="Askastra" aria-labelledby="offcanvasRightLabel">
+
+
+
+    <!-- Ask Astra offcanvas -->
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="Askastra" aria-labelledby="offcanvasRightLabel" style="width: 50%;">
         <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="offcanvasRightLabel">Chat with Astra</h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -303,12 +316,35 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <?php endif; ?>
         </div>
           </div>
-          <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" class="input-group" id="msgForm">
+          <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" class="input-group" id="msgForm"  >
             <textarea id="chatInput" name="prompt" class="form-control" rows="1" placeholder="Type your message..."></textarea>
             <button type="submit" name="askastra" id="send-button" class="btn btn-primary">Send</button>
           </form>
         </div>
       </div>
+
+
+
+
+      <style>
+        /* code {
+          font-family: 'Consolas', 'Courier New', monospace;
+          color:rgb(230, 84, 17);
+          padding: 2px 4px;
+          border-radius: 3px;
+        }
+
+        pre {
+          background-color: #1e1e1e;
+          color: #d4d4d4;
+          padding: 15px;
+          border-radius: 5px;
+          overflow: auto;
+          margin: 20px 0;
+          font-size: 14px;
+          line-height: 1.4;
+        } */
+      </style>
 
 
 

@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+const chatMessages = document.getElementById('chatMessages');
+
 // Select DOM elements with error handling
 function addMessage(text, sender) {
     const messageDiv = document.createElement('div');
@@ -63,4 +65,7 @@ function addMessage(text, sender) {
     messageDiv.textContent = text;
     chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
+}
+
+
+

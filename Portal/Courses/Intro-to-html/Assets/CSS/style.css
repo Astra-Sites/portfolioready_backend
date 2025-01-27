@@ -1,10 +1,10 @@
 .profile-pic{
     width: 40px;
     height: 40px;
-    background-image: url("https://i.postimg.cc/SKWKPBqB/DSC-2000.jpg");
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
+    border: 1px solid #707070;
   }
 
   .chat-astra{
