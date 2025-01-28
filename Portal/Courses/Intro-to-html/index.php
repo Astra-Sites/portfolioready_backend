@@ -44,6 +44,13 @@ if (isset($_POST["askastra"])) {
                         ["text" => $prompt]
                     ]
                 ]
+            ],
+            "generationConfig" => [
+                "temperature" => 0.85,
+                "topK" => 40,
+                "topP" => 0.95,
+                "maxOutputTokens" => 8192,
+                "responseMimeType" => "text/plain"
             ]
         ]),
         CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
@@ -225,17 +232,17 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
 
 
                         <!-- Html Handler -->
-                      <textarea id="html-code" class="container-fluid textarea html-code" rows="30" style="color: aliceblue; background-color: black; overflow-y: scroll; width: 100%;" placeholder="Press ! and click enter to get basic html layout">
+                      <textarea id="html-code" class="container-fluid textarea html-code" rows="30" style="color: aliceblue; background-color: black; overflow-y: scroll; width: 100%;" placeholder="Press ! and click enter to get basic html layout"  spellcheck="false" >
                         <!-- HTML here -->
                       </textarea>
 
                       <!-- Css Handler -->
-                      <textarea id="css-code" class="container-fluid textarea css-code" rows="30"  style="color: aliceblue; background-color: black; overflow-y: scroll; width: 100%;" placeholder="Write your CSS here..">
+                      <textarea id="css-code" class="container-fluid textarea css-code" rows="30"  style="color: aliceblue; background-color: black; overflow-y: scroll; width: 100%;" placeholder="Write your CSS here.." spellcheck="false">
                         <!-- Css here -->
                       </textarea>
 
                       <!-- Js Handeler -->
-                      <textarea id="js-code" class="container-fluid textarea js-code" rows="30"  style="color: aliceblue; background-color: black; overflow-y: scroll; width: 100%;" placeholder="Write your Js Here..">
+                      <textarea id="js-code" class="container-fluid textarea js-code" rows="30"  style="color: aliceblue; background-color: black; overflow-y: scroll; width: 100%;" placeholder="Write your Js Here.." spellcheck="false">
                         <!-- Javascript here -->
                       </textarea>
 
@@ -373,7 +380,3 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
   </script>
 </body>
 </html>
-
-
-
-

@@ -1,49 +1,59 @@
 <?php
+session_start();
+require '../vendor/autoload.php';
+use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-
-require '../vendor/autoload.php';
-
-
-use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable('../');
 $dotenv->load();
 
-$mail = new PHPMailer(true);
-
-try {
-    // Server settings
-    $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = $_ENV['GMAIL_USERNAME']; // Your Gmail address
-    $mail->Password = $_ENV['GMAIL_APP_PASSWORD']; // Your Gmail App Password
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587;
-
-
-
-    // Recipients
-    $mail->setFrom($_ENV['GMAIL_USERNAME'], 'Portfolio Ready'); // From email and name
-
-    $mail->addAddress($_POST['email'], 'Coder Info'); // Add recipient
-
-    $mail->addReplyTo($_ENV['GMAIL_USERNAME'], 'Portfolio Ready'); // Optional: Reply-to email
-
-
-
-
-    // Content
-    $mail->isHTML(true);
-    $mail->Subject = 'Test Email from Portfolio Ready';
-    $mail->Body = '<b>Hello!</b> This is a test email sent using Gmail and PHPMailer.';
-    $mail->AltBody = 'Hello! This is a test email sent using Gmail and PHPMailer  Welcome to portfolio Ready.';
-
-    // Send Email
-    $mail->send();
-    echo 'Email has been sent successfully.';
-} catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+// Check if the session is valid
+if (!isset($_SESSION['new_user'])) {
+    echo "Unauthorized access.";
+    exit;
 }
+
+
+
+$conn->close();
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="path/to/bootstrap.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>User Registration</h2>
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+            <div class="mb-3">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="<?php echo $_SESSION['user_email']; ?>" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+    <script src="path/to/bootstrap.js"></script>
+</body>
+</html>
