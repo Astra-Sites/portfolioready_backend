@@ -17,16 +17,21 @@ if(!isset($_GET['token'])){
         $stmt->execute();
         $result = $stmt->get_result();
         $token_data = $result->fetch_assoc();
-        $email = $token_data['email'];
+    
+        // Check if the token is valid and not expired
         if ($token_data && strtotime($token_data['expires_at']) > time()) {
             // Token is valid and not expired
 
+            // Get the user's email from the token data
+            $email = $token_data['email'];
 
             // Proceed with the registration process
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
                 // Escape user inputs for security
                 $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
                 $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
+                $email = mysqli_real_escape_string($conn, $email);
                 $password = mysqli_real_escape_string($conn, $_POST['password']);
                 $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
                 // Validate input
@@ -58,6 +63,7 @@ if(!isset($_GET['token'])){
                 }
             }
 
+            // 
 
 
         } else {

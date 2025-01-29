@@ -203,15 +203,35 @@ if (isset($_POST['reg_new'])) {
     if ($result->num_rows > 0) {
         echo "<script>alert('User already exists');</script>";
     } else {
+
+
+        // Check if the user already exists in the user_tokens table
+        $sql = "SELECT * FROM user_tokens WHERE email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $new_user);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            // Update the token and expiration time
+            $update_token = "UPDATE user_tokens SET token = ?, expires_at = ? WHERE email = ?";
+            $stmt = $conn->prepare($update_token);
+            $stmt->bind_param("sss", $token, $expires_at, $new_user);
+            $stmt->execute();
+        } else {
+
         // Insert the token into the user_tokens table
         $insert_token = "INSERT INTO user_tokens (email, token, expires_at) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($insert_token);
         $stmt->bind_param("sss", $new_user, $token, $expires_at);
 
+        }
+
+
+
         if ($stmt->execute()) {
             // Send the email with the registration link
             $mail = new PHPMailer(true);
-
             try {
                 // Server settings
                 $mail->isSMTP();
@@ -233,7 +253,7 @@ if (isset($_POST['reg_new'])) {
                 $mail->Body = '<b>Hello!</b> Click the link below to register your Portfolio Ready account: 
                     <a href="http://localhost/PortfolioReady/Auth/email_callback.php?token=' . urlencode($token) . '">Register</a>';
                 $mail->AltBody = 'Hello! Welcome to Portfolio Ready.';
-                
+
                 $mail->send();
                 echo "<script>alert('Registration link sent successfully!');</script>";
             } catch (Exception $e) {
