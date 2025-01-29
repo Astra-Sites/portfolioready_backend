@@ -1,13 +1,12 @@
 <?php
+// Start the session
 session_start();
 if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth'])) {
    header('location: ../../../AUTH/signin.php');
    exit();
 }
 
-include('../../../Database/db.php');
-
-
+include('../../../Database/db.php'); //connection to database
 
 require '../../../vendor/autoload.php'; // Ensure Parsedown is included
 

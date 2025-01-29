@@ -135,7 +135,6 @@ $MS_redirectUri = $_ENV['MICROSOFT_REDIRECT_URI'];
     </div>
 
 
-
 <!--Register Modal -->
 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -158,7 +157,6 @@ $MS_redirectUri = $_ENV['MICROSOFT_REDIRECT_URI'];
     </div>
   </div>
 </div>
-
 
 
 <!-- Bootstrap JS and dependencies -->
@@ -189,66 +187,63 @@ myModal.addEventListener('shown.bs.modal', () => {
 <?php
 
 
-if(isset($_POST['reg_new'])){
+if (isset($_POST['reg_new'])) {
 
-    $new_user = $_POST['new_email'];
+    $new_user = mysqli_real_escape_string($conn, $_POST['new_email']); // Escape user input
+    $token = bin2hex(random_bytes(16)); // Generate a unique token
+    $expires_at = date("Y-m-d H:i:s", strtotime('+1 hour')); // Set expiration time to 1 hour from now
 
-    #check is user already exist
-    $sql = "SELECT * FROM users WHERE email = '$new_user'";
-    $result = mysqli_query($conn, $sql);
-    $num = mysqli_num_rows($result);
+    // Check if the user already exists
+    $sql = "SELECT * FROM users WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $new_user);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if($num == 1){
-        echo" <script>alert('User already exist')</script>";
-    }else{
-    
-        #send the email with registration link
-        $mail = new PHPMailer(true);
+    if ($result->num_rows > 0) {
+        echo "<script>alert('User already exists');</script>";
+    } else {
+        // Insert the token into the user_tokens table
+        $insert_token = "INSERT INTO user_tokens (email, token, expires_at) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($insert_token);
+        $stmt->bind_param("sss", $new_user, $token, $expires_at);
 
+        if ($stmt->execute()) {
+            // Send the email with the registration link
+            $mail = new PHPMailer(true);
 
-        try {
-            // Server settings
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = $_ENV['GMAIL_USERNAME']; // Your Gmail address
-            $mail->Password = $_ENV['GMAIL_APP_PASSWORD']; // Your Gmail App Password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-        
-            // Recipients
-            $mail->setFrom($_ENV['GMAIL_USERNAME'], 'Portfolio Ready'); // From email and name
-            $mail->addAddress($new_user, 'Coder Info'); // Add recipient
-            $mail->addReplyTo($_ENV['GMAIL_USERNAME'], 'Portfolio Ready'); // Optional: Reply-to email
-        
-            // Content
-            $mail->isHTML(true);
-            $mail->Subject = 'Register to Portfolio Ready';
-            $mail->Body = '<b>Hello!</b> . Click the link below to register your Porfolio Ready account. <a href="http://localhost/PortfolioReady/Auth/email_callback.php">Register</a>';
-            $mail->AltBody = 'Hello! This is a test email sent using Gmail and PHPMailer  Welcome to portfolio Ready.';
-        
-            // start session
-            session_start();
-            $_SESSION['new_user'] = $new_user;
-            #send the email
-            $mail->send();
+            try {
+                // Server settings
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = $_ENV['GMAIL_USERNAME']; // Your Gmail address
+                $mail->Password = $_ENV['GMAIL_APP_PASSWORD']; // Your Gmail App Password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
 
-            echo" <script>alert('Registration link sent successfully!')</script>";
-        } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                // Recipients
+                $mail->setFrom($_ENV['GMAIL_USERNAME'], 'Portfolio Ready');
+                $mail->addAddress($new_user, 'Coder Info');
+                $mail->addReplyTo($_ENV['GMAIL_USERNAME'], 'Portfolio Ready');
+
+                // Content
+                $mail->isHTML(true);
+                $mail->Subject = 'Register to Portfolio Ready';
+                $mail->Body = '<b>Hello!</b> Click the link below to register your Portfolio Ready account: 
+                    <a href="http://localhost/PortfolioReady/Auth/email_callback.php?token=' . urlencode($token) . '">Register</a>';
+                $mail->AltBody = 'Hello! Welcome to Portfolio Ready.';
+                
+                $mail->send();
+                echo "<script>alert('Registration link sent successfully!');</script>";
+            } catch (Exception $e) {
+                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            }
+        } else {
+            echo "<script>alert('Failed to generate token');</script>";
         }
-
-
-
     }
 
-
-
-    echo" <script>alert( '.$new_user.')</script>";
- 
-
-
+    $stmt->close();
 }
-
-
 ?>
