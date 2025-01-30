@@ -52,8 +52,101 @@ if (isset($_POST['reg_new'])) {
                 // Content
                 $mail->isHTML(true);
                 $mail->Subject = 'Register to Portfolio Ready';
-                $mail->Body = '<b>Hello!</b> Click the link below to register your Portfolio Ready account: 
-                    <a href="http://localhost/PortfolioReady/Auth/email_callback.php?token=' . urlencode($token) . '">Register</a>';
+                $mail->Body = '
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <title>Portfolio Ready</title>
+                  <style>
+                      body {
+                          margin: 0;
+                          padding: 0;
+                          box-sizing: border-box;
+                          font-family: Arial, sans-serif;
+                          font-size: 20px;
+                          line-height: 1.5;
+                          color: #333;
+                          background-color: #f8f9fa;
+                      }
+                      .container {
+                          max-width: 600px;
+                          margin: 0 auto;
+                          padding: 20px;
+                          background-color: #ffffff;
+                          border-radius: 10px;
+                          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                      }
+                      .title {
+                          text-align: center;
+                          margin-bottom: 20px;
+                          font-size: 24px;
+                      }
+                      .title h1 {
+                          color: #333333;
+                      }
+                      .content {
+                          margin-bottom: 20px;
+                      }
+                      .content p {
+                          color: #555555;
+                          line-height: 1.6;
+                          text-align: center;
+                      }
+                      .register-link {
+                          text-align: center;
+                          margin: 30px 0;
+                      }
+                      .register-link a {
+                          background-color: #71c55d;
+                          color: #ffffff;
+                          padding: 10px 20px;
+                          text-decoration: none;
+                          border-radius: 5px;
+                      }
+                      .register-link a:hover {
+                          background-color: #5a9c4a;
+                      }
+                      footer {
+                          text-align: center;
+                          color: #777777;
+                          font-size: 15px;
+                      }
+                      footer p {
+                          margin: 5px 0;
+                      }
+                      footer a {
+                          color: #007bff;
+                          text-decoration: none;
+                      }
+                      footer a:hover {
+                          text-decoration: underline;
+                      }
+                  </style>
+              </head>
+              <body>
+                  <div class="container">
+                      <div class="title">
+                          <h1>Portfolio Ready</h1>
+                      </div>
+                      <div class="content">
+                          <p>Thank you for your interest in portfolio ready. <br> Your software development success begins here!. <br> Kindly use the following link to register!</p>
+                      </div>
+                      <div class="register-link">
+                          <a href="http://localhost/PortfolioReady/Auth/email_callback.php?token=<?php echo urlencode($token); ?>">Register Now</a>
+                          <p>The link expires in 1 hour</p>
+                      </div>
+                      <footer>
+                          <p>Best Regards,</p>
+                          <p><strong>Astra Softwares</strong></p>
+                          <p><a href="https://astrasoft.tech">www.astrasoft.tech</a></p>
+                          <p>info.astrasoft.tech</p>
+                          <p>All rights reserved.</p>
+                      </footer>
+                  </div>
+              </body>
+              </html>';
                 $mail->AltBody = 'Hello! Welcome to Portfolio Ready.';
 
                 $mail->send();
