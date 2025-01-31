@@ -111,6 +111,35 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
   <script>hljs.highlightAll();</script>
 
 
+  <!-- JavaScript to Keep Offcanvas Open After Submit -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let offcanvasElement = document.getElementById("Askastra");
+
+        // Check if the offcanvas should be opened after reload
+        if (localStorage.getItem("keepOffcanvasOpen") === "true") {
+            let offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+            offcanvas.show();
+        }
+
+        // Store the state when offcanvas opens
+        offcanvasElement.addEventListener("shown.bs.offcanvas", function () {
+            localStorage.setItem("keepOffcanvasOpen", "true");
+        });
+
+        // Remove state when offcanvas closes
+        offcanvasElement.addEventListener("hidden.bs.offcanvas", function () {
+            localStorage.removeItem("keepOffcanvasOpen");
+        });
+
+        // Ensure the offcanvas remains open after form submission
+        document.getElementById("msgForm").addEventListener("submit", function () {
+            localStorage.setItem("keepOffcanvasOpen", "true");
+        });
+    });
+</script>
+
+
   <!-- BOOSTRAP ICONS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <!-- Stylesheet -->
@@ -216,7 +245,6 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
                 <!-- Learn End -->
 
 
-
                 <!-- Code -->
                 <div class="col code mt-5" >
 
@@ -227,7 +255,6 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
                              <p class="text-light pe-4 code-nav-item css-nav" style="border-right: 1px solid gray;">Style.css</p>
                              <p class="text-light code-nav-item js-nav">Script.js</p>
                       </div>
-
 
 
                         <!-- Html Handler -->
@@ -303,31 +330,33 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
 
 
 
-    <!-- Ask Astra offcanvas -->
-      <div class="offcanvas offcanvas-start" tabindex="-1" id="Askastra" aria-labelledby="offcanvasRightLabel" style="width: 50%;">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasRightLabel">Chat with Astra</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body d-flex flex-column">
-          <div id="chat-messages" class="flex-grow-1 overflow-auto mb-3">
+    <!-- Ask Astra Offcanvas -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="Askastra" aria-labelledby="offcanvasRightLabel" style="width: 50%;">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Chat with Astra</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+        <div id="chat-messages" class="flex-grow-1 overflow-auto mb-3">
             <!-- Chat messages will appear here -->
-          <div id="chatMessages" class="chat-messages">
-          <div class="message bot mb-4">Hi, welcome Astra here!  How can we assit you today?. 😍</div>
-            <?php if (!empty($userprompt)): ?>
-            <div class="message user"><?php echo $userprompt; ?></div>
-            <?php endif; ?>
-            <?php if (!empty($htmlOutput)): ?>
-                <div class="message bot"><?php echo $htmlOutput; ?></div>
-            <?php endif; ?>
+            <div id="chatMessages" class="chat-messages">
+                <div class="message bot mb-4">Hi, welcome Astra here! How can we assist you today? 😍</div>
+                <?php if (!empty($userprompt)): ?>
+                    <div class="message user"><?php echo $userprompt; ?></div>
+                <?php endif; ?>
+                <?php if (!empty($htmlOutput)): ?>
+                    <div class="message bot"><?php echo $htmlOutput; ?></div>
+                <?php endif; ?>
+            </div>
         </div>
-          </div>
-          <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" class="input-group" id="msgForm"  >
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" class="input-group" id="msgForm">
             <textarea id="chatInput" name="prompt" class="form-control" rows="1" placeholder="Type your message..."></textarea>
             <button type="submit" name="askastra" id="send-button" class="btn btn-primary">Send</button>
-          </form>
-        </div>
-      </div>
+        </form>
+    </div>
+</div>
+
+
 
 
 

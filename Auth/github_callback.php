@@ -79,11 +79,9 @@ try {
     echo 'Request Exception: ' . $e->getMessage();
     exit();
 }
+
+
 ?>
-
-
-
-<?php
 
 
 
