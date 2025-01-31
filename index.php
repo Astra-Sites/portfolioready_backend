@@ -89,10 +89,10 @@
                 <nav class="hidden lg:block">
                     <ul class="flex gap-x-10 xl:gap-x-12 text-slate-800 text-sm font-bold child:transition-colors child:delay-75 child-hover:text-primary">
                         <li>
-                            <a href="#">Home</a>
+                            <a href="index.php">Home</a>
                         </li>
                         <li>
-                            <a href="#service">About</a>
+                            <a href="pricing.php">Pricing</a>
                         </li>
                         <li>
                             <a href="#service">Courses</a>
