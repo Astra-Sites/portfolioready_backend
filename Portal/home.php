@@ -45,7 +45,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
    <section class="flex">
 
 
-       <a href="home.php" class="logo">PortfoioReady</a> 
+       <a href="home.php" class="logo">PortfolioReady</a> 
 
       <form action="search.php" method="post" class="search-form">
          <input type="text" name="search_box" required placeholder="search courses..." maxlength="100">

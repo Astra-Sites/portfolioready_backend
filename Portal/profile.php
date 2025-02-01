@@ -1,14 +1,14 @@
 <?php
 session_start();
-if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth'])) {
+if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth']) && !isset($_SESSION['email_auth'])) {
    header('location: ../AUTH/signin.php');
    exit();
 }
 
-include('../Database/db.php');
+require_once('../Database/db.php');
 
 // Check which session variable is set and get the user ID
-$id = isset($_SESSION['google_auth']) ? $_SESSION['google_auth'] : $_SESSION['github_auth'];
+$id = isset($_SESSION['google_auth']) ? $_SESSION['google_auth'] : (isset($_SESSION['github_auth']) ? $_SESSION['github_auth'] : $_SESSION['email_auth']);
 
 // Use prepared statements to prevent SQL injection
 $stmt = $conn->prepare("SELECT * FROM users WHERE SN = ?");

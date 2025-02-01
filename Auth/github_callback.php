@@ -50,11 +50,36 @@ try {
             $userData = json_decode($userResponse->getBody()->getContents(), true);
             $firstName = htmlspecialchars($userData['name'], ENT_QUOTES, 'UTF-8');
             $lastName = ''; // GitHub does not provide last name, set it to empty or handle accordingly
-            $email = htmlspecialchars($userData['email'], ENT_QUOTES, 'UTF-8');
             $profileImage = htmlspecialchars($userData['avatar_url'], ENT_QUOTES, 'UTF-8');
             $phone = ''; // GitHub does not provide phone, set it to empty or handle accordingly
             $password = ''; // Set password to empty or handle accordingly
             $regDate = date('Y-m-d H:i:s'); // Current date and time
+
+            // Get the user's email addresses if not provided in the initial response
+            $email = htmlspecialchars($userData['email'], ENT_QUOTES, 'UTF-8');
+            if (empty($email)) {
+                $emailResponse = $client->get('https://api.github.com/user/emails', [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $accessToken,
+                        'Accept' => 'application/json'
+                    ]
+                ]);
+
+                if ($emailResponse->getStatusCode() == 200) {
+                    $emailData = json_decode($emailResponse->getBody()->getContents(), true);
+                    foreach ($emailData as $emailInfo) {
+                        if ($emailInfo['primary'] && $emailInfo['verified']) {
+                            $email = htmlspecialchars($emailInfo['email'], ENT_QUOTES, 'UTF-8');
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (empty($email)) {
+                echo 'No verified primary email found.';
+                exit();
+            }
 
             // Insert or update user information in the database
             include('../Database/db.php');
@@ -79,11 +104,4 @@ try {
     echo 'Request Exception: ' . $e->getMessage();
     exit();
 }
-
-
 ?>
-
-
-
-
-

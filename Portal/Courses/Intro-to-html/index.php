@@ -1,10 +1,14 @@
 <?php
 // Start the session
 session_start();
-if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth'])) {
-   header('location: ../../../AUTH/signin.php');
-   exit();
+if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth']) && !isset($_SESSION['email_auth'])) {
+  header('location: ../../../AUTH/signin.php');
+  exit();
 }
+
+// Check if the user is logged in
+// Check which session variable is set and get the user ID
+$id = isset($_SESSION['google_auth']) ? $_SESSION['google_auth'] : (isset($_SESSION['github_auth']) ? $_SESSION['github_auth'] : $_SESSION['email_auth']);
 
 include('../../../Database/db.php'); //connection to database
 
@@ -16,7 +20,22 @@ use Dotenv\Dotenv; // Keep this for dotenv since it is namespaced
 $dotenv = Dotenv::createImmutable('../../../');
 $dotenv->load();
 
+// Use prepared statements to prevent SQL injection
+$stmt = $conn->prepare("SELECT * FROM users WHERE SN = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$details = $result->fetch_object();
 
+$profileImage = htmlspecialchars($details->Avatar, ENT_QUOTES, 'UTF-8'); // Sanitize output
+$name = htmlspecialchars($details->First_Name, ENT_QUOTES, 'UTF-8'); // Sanitize output
+$email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize output
+
+
+
+
+
+// Ask Astra start
 $userprompt = "";
 $htmlOutput = "";
 
@@ -76,25 +95,7 @@ if (isset($_POST["askastra"])) {
     // echo $htmlOutput;
 }
 
-
-
-
-// Check if the user is logged in
-// Check which session variable is set and get the user ID
-$id = isset($_SESSION['google_auth']) ? $_SESSION['google_auth'] : $_SESSION['github_auth'];
-
-// Use prepared statements to prevent SQL injection
-$stmt = $conn->prepare("SELECT * FROM users WHERE SN = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
-$details = $result->fetch_object();
-
-$profileImage = htmlspecialchars($details->Avatar, ENT_QUOTES, 'UTF-8'); // Sanitize output
-$name = htmlspecialchars($details->First_Name, ENT_QUOTES, 'UTF-8'); // Sanitize output
-$email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize output
-
-
+// Ask Astra end
 ?>
 
 
