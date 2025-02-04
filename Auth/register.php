@@ -14,6 +14,7 @@ session_start();
 $dotenv = Dotenv::createImmutable('../');
 $dotenv->load();
 
+
 if (isset($_POST['reg_new'])) {
 
     $new_user = $_POST['new_email']; 
@@ -28,9 +29,9 @@ if (isset($_POST['reg_new'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        echo '<div class="alert alert-warning container w-50" role="alert">
-           <i class="bi bi-envelope-exclamation"></i> The email address already exists. Please use a different email address.
-        </div>';
+        echo '<div class="alert alert-warning container mt-5 w-50" role="alert">
+              <i class="bi bi-envelope-exclamation me-3"></i> The email address already exists. Please use a different email address.
+              </div>';
     } else {
 
         // Check if the user already exists in the user_tokens table
@@ -178,7 +179,7 @@ if (isset($_POST['reg_new'])) {
                 $mail->AltBody = 'Hello! Welcome to Portfolio Ready.';
 
                 $mail->send();
-                echo '<div class="container w-50  alert alert-success" role="alert">
+                echo '<div class="container w-50  alert alert-success mt-5" role="alert">
                       <i class="bi bi-check-circle-fill"></i> Registration link sent successfullly Kindly check your email;
                       </div>';
             } catch (Exception $e) {
@@ -223,7 +224,7 @@ if (isset($_POST['reg_new'])) {
                             <input type="email" name="new_email" class="form-control py-2" id="register_email" placeholder="Enter your email" required>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" >Back</button>
+                            <button type="button" class="btn btn-secondary" name="back" onclick="window.location='signin.php'" >Back</button>
                             <button type="submit" class="btn btn-success" id="sendemail" name="reg_new">Send Link</button>
                         </div>
                     </form>
