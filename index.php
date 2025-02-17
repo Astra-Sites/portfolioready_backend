@@ -16,6 +16,10 @@
         border-radius: 10px;
         transition: all 0.5s ease-in-out;
         }
+
+        a{
+            cursor: pointer;
+        }
     </style>
     <!-- Scripts -->
     <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -107,7 +111,7 @@
                 </nav>
                 <!-- Header Button -->
                 <a class="hidden lg:block h-full w-44 border  text-indigo-800  text-sm font-bold text-center leading-[3rem] rounded-xl transition-colors" href="#contact" style="border: 1px solid #71c55d;" ><i class="bi bi-stars" style="margin-right: .7rem; color: #71c55d;"></i>Ask Astra</a>
-                <a class="hidden lg:block h-full w-44  text-white text-sm font-bold text-center leading-[3rem] rounded-xl transition-colors hover:bg-indigo-800" href="auth/signin.php" style="background-color: #71c55d;">Get Started Today</a>
+                <a class="hidden lg:block h-full w-44  text-white text-sm font-bold text-center leading-[3rem] rounded-xl transition-colors hover:bg-indigo-800" href="auth/index.php" style="background-color: #71c55d;">Get Started Today</a>
                 <!-- Mobile Menu -->
                 <div class="lg:hidden relative">
                     <!-- Mobile Menu Toggle Icon -->

@@ -1,11 +1,11 @@
 <?php
 session_start();
 if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth']) && !isset($_SESSION['email_auth'])) {
-   header('location: ../AUTH/signin.php');
+   header('location: ../AUTH/index.php');
    exit();
 }
 
-include('../Database/db.php');
+include '../Database/db.php';
 
 // Check which session variable is set and get the user ID
 $id = isset($_SESSION['google_auth']) ? $_SESSION['google_auth'] : (isset($_SESSION['github_auth']) ? $_SESSION['github_auth'] : $_SESSION['email_auth']);
@@ -109,7 +109,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
          <h3 class="title">Courses Enrolled</h3>
          <h3 class="likes">4</h3>
          <div class="flex">
-               <a href="#"><i class="fa fa-graduation-cap" aria-hidden="true"></i><span>View Courses</span></a>
+               <a href=""><i class="fa fa-graduation-cap" aria-hidden="true"></i><span>View Courses</span></a>
          </div>
       </div>
 
@@ -183,6 +183,84 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
 
 <section class="courses">
    <h1 class="heading">Our Courses</h1>
+   
+   <!-- Filter -->
+   <div class="filter-container">
+    <span class="filter-title">Filter by:</span>
+
+    <!-- Grade Filter -->
+    <div class="filter-dropdown">
+        <button class="filter-button">Grade ▼</button>
+        <div class="dropdown-content">
+            <label class="form-check">
+                <input type="checkbox"> Kindergarten
+            </label>
+            <label class="form-check">
+                <input type="checkbox"> Grade 1
+            </label>
+        </div>
+    </div>
+
+    <!-- Duration Filter -->
+    <div class="filter-dropdown">
+        <button class="filter-button">Duration ▼</button>
+        <div class="dropdown-content">
+            <label class="form-check">
+                <input type="checkbox"> Short
+            </label>
+            <label class="form-check">
+                <input type="checkbox"> Long
+            </label>
+        </div>
+    </div>
+
+    <!-- Topic Filter -->
+    <div class="filter-dropdown">
+        <button class="filter-button">Topic ▼</button>
+        <div class="dropdown-content">
+            <label class="form-check">
+                <input type="checkbox"> Math
+            </label>
+            <label class="form-check">
+                <input type="checkbox"> Science
+            </label>
+        </div>
+    </div>
+
+    <!-- Device Filter -->
+    <div class="filter-dropdown">
+        <button class="filter-button">Device ▼</button>
+        <div class="dropdown-content">
+            <label class="form-check">
+                <input type="checkbox"> Tablet
+            </label>
+            <label class="form-check">
+                <input type="checkbox"> Laptop
+            </label>
+        </div>
+    </div>
+
+    <!-- Curriculum Filter -->
+    <div class="filter-dropdown">
+        <button class="filter-button">Curriculum ▼</button>
+        <div class="dropdown-content">
+            <label class="form-check">
+                <input type="checkbox"> National
+            </label>
+            <label class="form-check">
+                <input type="checkbox"> International
+            </label>
+        </div>
+    </div>
+
+    <!-- Clear Filters -->
+    <a href="#" class="clear-filters">Clear filters</a>
+</div>
+
+
+
+   <!-- Filter end -->
+
    <div class="box-container">
       <div class="box">
          <div class="tutor">
@@ -197,7 +275,7 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
             <span>10 videos</span>
          </div>
          <h3 class="title">Web Development Fundamentals</h3>
-         <a href="playlist.php" class="inline-btn">Enroll Now</a>
+         <a href="https://classroom.google.com/c/NzQ2NzIwMzE5NDYx?cjc=kam33vn" class="inline-btn">Enroll Now</a>
       </div>
 
       <div class="box">
@@ -296,6 +374,84 @@ $email = htmlspecialchars($details->Email, ENT_QUOTES, 'UTF-8'); // Sanitize out
    &copy; copyright @ <span id="date"></span>  by <span>Astrasoftwares</span> | all rights reserved!
 
 </footer>
+
+
+
+<!-- custom styles for filter courses link  -->
+<style>
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .filter-title {
+            font-weight: bold;
+        }
+
+        /* Dropdown button styling */
+        .filter-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .filter-button {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .filter-button:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Dropdown content (hidden by default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            z-index: 10;
+        }
+
+        /* Show dropdown when button is clicked */
+        .filter-dropdown:focus-within .dropdown-content {
+            display: block;
+        }
+
+        /* Style checkboxes inside the dropdown */
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .form-check input {
+            margin-right: 8px;
+        }
+
+        /* "Clear filters" link */
+        .clear-filters {
+            color:rgb(66, 193, 70);
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+
+        .clear-filters:hover {
+            text-decoration: underline;
+        }
+    </style>
+
 
 <!-- custom js file link  -->
 <script src="js/script.js"></script>

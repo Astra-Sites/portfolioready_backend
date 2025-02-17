@@ -13,3 +13,6 @@
         }
    
 ?>
+
+
+<!-- SN, First_Name, Last_Name, Phone, Email, Avatar, Pass, Reg_Date -->

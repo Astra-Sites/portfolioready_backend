@@ -40,7 +40,7 @@ if (isset($_POST['login-email'])) {
     $pass = $_POST['pass'];
 
     // Check if the user exists
-    $sql = "SELECT * FROM users WHERE email = ?";
+    $sql = "SELECT * FROM users WHERE email = ?AND User_Role = 'user'";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();

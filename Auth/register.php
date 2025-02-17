@@ -59,7 +59,6 @@ if (isset($_POST['reg_new'])) {
 
 
     if ($stmt->execute()) {
-
             // Send the email with the registration link
             $mail = new PHPMailer(true);
             try {
@@ -224,7 +223,7 @@ if (isset($_POST['reg_new'])) {
                             <input type="email" name="new_email" class="form-control py-2" id="register_email" placeholder="Enter your email" required>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" name="back" onclick="window.location='signin.php'" >Back</button>
+                            <button type="button" class="btn btn-secondary" name="back" onclick="window.location='index.php'" >Back</button>
                             <button type="submit" class="btn btn-success" id="sendemail" name="reg_new">Send Link</button>
                         </div>
                     </form>

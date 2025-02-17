@@ -1,8 +1,29 @@
+<?php
+require_once "../Database/db.php";
+
+// Check admin users
+
+$users  = "SELECT * from users";
+
+$result = mysqli_query($conn, $users);
+
+// get number of users
+$rows = mysqli_num_rows($result);
+
+
+
+
+
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Kaiadmin - Bootstrap 5 Admin Dashboard</title>
+    <title>PortfolioReady | Admin Panel</title>
     <meta
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
       name="viewport"
@@ -10,8 +31,7 @@
     <link
       rel="icon"
       href="assets/img/kaiadmin/favicon.ico"
-      type="image/x-icon"
-    />
+      type="image/x-icon"/>
 
     <!-- Fonts and icons -->
     <script src="assets/js/plugin/webfont/webfont.min.js"></script>
@@ -48,7 +68,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="index.html" class="logo">
+            <a href="dashboard.php" class="logo">
               <img
                 src="assets/img/kaiadmin/logo_light.svg"
                 alt="navbar brand"
@@ -87,7 +107,7 @@
                 <div class="collapse" id="dashboard">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="../demo1/index.html">
+                      <a href="../demo1/dashboard.php">
                         <span class="sub-item">Dashboard 1</span>
                       </a>
                     </li>
@@ -264,7 +284,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../../documentation/index.html">
+                <a href="../../documentation/dashboard.php">
                   <i class="fas fa-file"></i>
                   <p>Documentation</p>
                   <span class="badge badge-secondary">1</span>
@@ -332,7 +352,7 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-              <a href="index.html" class="logo">
+              <a href="dashboard.php" class="logo">
                 <img
                   src="assets/img/kaiadmin/logo_light.svg"
                   alt="navbar brand"
@@ -345,6 +365,16 @@
                   <i class="gg-menu-right"></i>
                 </button>
                 <button class="btn btn-toggle sidenav-toggler">
+                  <i class="gg-menu-left"></i>
+                </button>
+              </div>
+              <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+              </button> <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                  <i class="gg-menu-right"></i>
+                </button>
+                <button class=""btn btn-toggle sidenav-toggler">"
                   <i class="gg-menu-left"></i>
                 </button>
               </div>
@@ -710,6 +740,8 @@
           <!-- End Navbar -->
         </div>
 
+
+
         <div class="container">
           <div class="page-inner">
             <div
@@ -717,7 +749,7 @@
             >
               <div>
                 <h3 class="fw-bold mb-3">Dashboard</h3>
-                <h6 class="op-7 mb-2">Free Bootstrap 5 Admin Dashboard</h6>
+                <h6 class="op-7 mb-2">PortfolioReady Admin Panel</h6>
               </div>
               <div class="ms-md-auto py-2 py-md-0">
                 <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
@@ -738,8 +770,8 @@
                       </div>
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                          <p class="card-category">Visitors</p>
-                          <h4 class="card-title">1,294</h4>
+                          <p class="card-category">Users</p>
+                          <h4 class="card-title"><?php echo$rows; ?></h4>
                         </div>
                       </div>
                     </div>

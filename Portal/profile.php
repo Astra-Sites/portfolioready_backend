@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['google_auth']) && !isset($_SESSION['github_auth']) && !isset($_SESSION['email_auth'])) {
-   header('location: ../AUTH/signin.php');
+   header('location: ../AUTH/index.php');
    exit();
 }
 
